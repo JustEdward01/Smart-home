@@ -1,164 +1,87 @@
 # Smart Home
 
-A Smart House web application with a modular frontend and backend: control
-lights per room, a thermostat, security, energy monitoring and quick scenes.
+A web app for controlling a house: lights, heating, security and energy use.
+Built as a student project for the Web Applications course.
 
-Project by **Patru Eduard Andrei**, Year 1, Group 352B.
+Patru Eduard Andrei, Year 1, Group 352B.
 
----
+## What it does
 
-## Tech
+The page shows a control panel for a house with four rooms. You can switch
+lights on and off and dim them, set the thermostat between 15 and 30 degrees,
+lock the front door, arm the alarm, and turn the outdoor camera on or off.
 
-- **Backend:** Node.js + Express, split into routes, services and a data store
-- **Frontend:** HTML, CSS and native ES modules (no frameworks, no build step)
-- **Communication:** a REST API over `fetch`, JSON both ways
-- **Persistence:** the home state is saved to `data/state.json` and survives a restart
+Four scene buttons change several things at once. "Away" turns everything off
+and arms the alarm, "Movie" dims the living room, and so on.
 
-## How to run it
+The energy panel shows how much power the house is drawing right now. It goes
+up when you turn lights on and down when you turn them off, because the server
+recalculates it from whatever is currently switched on.
 
-You need **Node.js** installed, version 18 or newer: https://nodejs.org
+Everything you do is saved on the server, so the state is still there after you
+close the browser or restart the app.
+
+## Running it
+
+You need Node.js 18 or newer, from https://nodejs.org
+
+Open a terminal in the project folder and run:
 
 ```
 npm install
 npm start
 ```
 
-Then open **http://localhost:3000**
+Then open http://localhost:3000 in a browser.
 
-`npm run dev` starts the same server with automatic restart on file changes.
+Press Ctrl+C in the terminal to stop the server.
 
-## Project structure
+Open the app through localhost, not by double-clicking `index.html`. The page
+loads its JavaScript as modules and talks to the server, and neither works when
+the file is opened directly.
+
+## How it is built
+
+The backend is Node.js with Express. It keeps the state of the house, saves it
+to `data/state.json`, and offers a small REST API. The frontend is plain HTML,
+CSS and JavaScript with no framework.
+
+The two talk over JSON. When you click something, the browser sends a request,
+the server updates the house and sends the whole state back, and the page
+redraws from it. That way the browser never keeps its own copy that could drift
+out of sync.
 
 ```
-smart-home/
-├── server.js                    starts the HTTP server, nothing else
-├── package.json
-├── README.md
-├── ARCHITECTURE.md              why the structure looks like this
-│
-├── data/
-│   └── state.json               saved home state (created on first run)
-│
-├── src/                         BACKEND
-│   ├── app.js                   assembles the Express app
-│   ├── config.js                port, paths, limits
-│   │
-│   ├── store/                   the data layer
-│   │   ├── defaultState.js      the shape of the home
-│   │   ├── stateStore.js        the only module that touches the disk
-│   │   └── eventLog.js          recent actions, in memory
-│   │
-│   ├── services/                the rules (no HTTP in here)
-│   │   ├── lightsService.js
-│   │   ├── climateService.js
-│   │   ├── securityService.js
-│   │   ├── sceneService.js
-│   │   ├── energyService.js     computes consumption from the state
-│   │   └── homeService.js       assembles what the frontend receives
-│   │
-│   ├── routes/                  HTTP only (no rules in here)
-│   │   ├── index.js             mounts everything under /api
-│   │   ├── homeRoutes.js        /state, /events, /reset
-│   │   ├── lightsRoutes.js
-│   │   ├── climateRoutes.js
-│   │   ├── securityRoutes.js
-│   │   └── sceneRoutes.js
-│   │
-│   ├── middleware/
-│   │   ├── requestLogger.js     one line per API call
-│   │   ├── notFound.js          unknown /api paths as JSON
-│   │   └── errorHandler.js      the single place errors become responses
-│   │
-│   └── utils/
-│       ├── clamp.js
-│       └── ApiError.js          an error that carries a status code
-│
-└── public/                      FRONTEND (served by the backend)
-    ├── index.html               structure only
-    │
-    ├── css/
-    │   ├── main.css             imports everything below, in order
-    │   ├── tokens.css           the design system
-    │   ├── base.css
-    │   ├── motion.css
-    │   ├── layout.css
-    │   └── components/          one file per component (11 files)
-    │
-    └── js/
-        ├── main.js              wires the panels to the store
-        ├── api/
-        │   ├── httpClient.js    the only module that calls fetch
-        │   └── homeApi.js       one function per endpoint
-        ├── state/
-        │   ├── store.js         state + subscribers
-        │   └── actions.js       everything the user can do
-        ├── ui/                  one module per panel (11 files)
-        └── utils/
-            ├── dom.js
-            └── format.js
+server.js       starts the server
+src/            backend: routes, services, and the state store
+public/         frontend: index.html, css/, js/
 ```
+
+`src/routes/` handles the HTTP side, `src/services/` holds the rules of the
+house, and `src/store/` is the only part that reads and writes the file. On the
+frontend, `js/ui/` has one file per panel, `js/api/` talks to the server, and
+`js/state/` keeps everything in sync.
+
+There is a longer explanation in [ARCHITECTURE.md](ARCHITECTURE.md), and more
+about running and testing it in [USAGE.md](USAGE.md).
 
 ## API
 
-Every write returns the full home state, so one request is enough to refresh
-the whole interface.
+| Method | Route               | What it does            |
+|--------|---------------------|-------------------------|
+| GET    | `/api/state`        | The state of the house  |
+| PATCH  | `/api/lights/:room` | Switch or dim a light   |
+| PATCH  | `/api/climate`      | Temperature and mode    |
+| PATCH  | `/api/security`     | Door, alarm, camera     |
+| POST   | `/api/scenes/:name` | Apply a scene           |
+| POST   | `/api/reset`        | Back to default values  |
 
-| Method | Route                | Body                        | What it does              |
-|--------|----------------------|-----------------------------|---------------------------|
-| GET    | `/api/state`         | –                           | The whole home            |
-| PATCH  | `/api/lights/:id`    | `{ on }` or `{ level }`     | Update one light          |
-| PATCH  | `/api/climate`       | `{ target }`, `{ mode }`    | Set temperature or mode   |
-| PATCH  | `/api/security`      | `{ door }`, `{ alarm }`, `{ camera }` | Update security |
-| GET    | `/api/scenes`        | –                           | List the available scenes  |
-| POST   | `/api/scenes/:name`  | –                           | Apply a scene             |
-| GET    | `/api/events`        | –                           | The full activity log     |
-| POST   | `/api/reset`         | –                           | Back to defaults          |
+Rooms are `living`, `kitchen`, `bedroom` and `hallway`. Scenes are `home`,
+`away`, `night` and `movie`.
 
-**Rooms** (`:id`): `living`, `kitchen`, `bedroom`, `hallway`
-**Scenes** (`:name`): `home`, `away`, `night`, `movie`
-**Values:** `mode` is `heating` or `cooling`; `door` is `locked` or `unlocked`;
-`alarm` is `armed` or `disarmed`; `level` is 0–100; `target` is 15–30 °C.
-
-`PATCH` routes also accept `POST`, so older clients keep working.
-
-### Trying the API without the browser
+You can try it without the interface:
 
 ```
 curl http://localhost:3000/api/state
-
-curl -X PATCH http://localhost:3000/api/lights/living \
-     -H "Content-Type: application/json" -d '{"level":35}'
-
 curl -X POST http://localhost:3000/api/scenes/movie
 ```
-
-Invalid input gets a clear error instead of a crash:
-
-```
-curl -X PATCH http://localhost:3000/api/climate \
-     -H "Content-Type: application/json" -d '{"mode":"turbo"}'
-# 400  {"error":"mode must be one of: heating, cooling"}
-```
-
-Out-of-range numbers are clamped rather than rejected: asking for 99 °C sets
-the thermostat to its 30 °C maximum.
-
-## Features
-
-- **Lights** in four rooms: on/off and a brightness slider each
-- **Climate:** thermostat from 15 to 30 °C, heating or cooling, humidity reading
-- **Security:** door lock, alarm, camera, with the state shown by colour
-- **Energy:** live draw computed by the server from what is on, plus a 7-day chart
-- **Scenes:** Home, Away, Night and Movie, each changing several devices at once
-- **Activity log:** the server records recent actions and the panel displays them
-- **Loading states:** skeleton placeholders on first load, a spinner on any
-  control waiting for the server
-- **Accessibility:** keyboard focus outlines, `aria-pressed` on every toggle,
-  and animations disabled when the system asks for reduced motion
-
-## Ideas to extend it
-
-- Replace the JSON file with SQLite (only `store/stateStore.js` changes)
-- Add authentication before the controls become usable
-- More device types: blinds, air conditioning, a robot vacuum
-- Schedules: apply the Night scene automatically at a set time
