@@ -1,9 +1,6 @@
 # Smart Home
 
 A web app for controlling a house: lights, heating, security and energy use.
-Built as a student project for the Web Applications course.
-
-Patru Eduard Andrei, Year 1, Group 352B.
 
 ## What it does
 
