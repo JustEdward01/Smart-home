@@ -1,0 +1,21 @@
+/* Activity panel: the action log coming from the server. */
+
+.activity{margin-top:var(--sp-5)}
+
+.event-list{list-style:none;display:flex;flex-direction:column}
+.event{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:var(--sp-4);
+  padding:var(--sp-3) 0;
+  border-top:1px solid var(--border);
+  font-size:var(--fs-small);
+}
+.event:first-child{border-top:none}
+.event .txt{color:var(--text)}
+.event .when{
+  color:var(--text-faint);
+  font-size:var(--fs-caption);
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.event-empty{color:var(--text-faint);font-size:var(--fs-small);padding-top:var(--sp-1)}

@@ -1,0 +1,28 @@
+/* ============================================================
+   MOTION
+   ------------------------------------------------------------
+   Keyframes and animation utilities, kept together so timing
+   can be reviewed in one place. Every animation here supports
+   understanding: entrance order, progress, or loading.
+   ============================================================ */
+
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{to{transform:translateX(100%)}}
+@keyframes progress{0%{background-position:-40% 0}100%{background-position:140% 0}}
+
+/* Staggered entrance: --i is the position in the sequence */
+.animate-in{
+  animation:rise var(--dur-slow) var(--ease-out) both;
+  animation-delay:calc(var(--i,0) * 55ms);
+}
+
+/* Respect the operating-system preference for reduced motion */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important}
+  .animate-in{animation:none}
+  .skeleton::after,
+  button.is-busy::after,
+  .device.is-busy::after,
+  .bar{animation:none}
+}

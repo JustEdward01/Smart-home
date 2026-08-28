@@ -1,0 +1,47 @@
+{
+  "lights": {
+    "living": {
+      "name": "Living Room",
+      "on": true,
+      "level": 18
+    },
+    "kitchen": {
+      "name": "Kitchen",
+      "on": false,
+      "level": 65
+    },
+    "bedroom": {
+      "name": "Bedroom",
+      "on": false,
+      "level": 45
+    },
+    "hallway": {
+      "name": "Hallway",
+      "on": true,
+      "level": 10
+    }
+  },
+  "climate": {
+    "target": 22,
+    "mode": "heating",
+    "current": 21.4,
+    "humidity": 45
+  },
+  "security": {
+    "door": "locked",
+    "alarm": "disarmed",
+    "camera": true
+  },
+  "scene": "movie",
+  "energy": {
+    "history7d": [
+      9.8,
+      11.2,
+      8.4,
+      12.9,
+      10.1,
+      14.3,
+      12.4
+    ]
+  }
+}

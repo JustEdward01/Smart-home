@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Home · Control Panel</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- one stylesheet; it imports the tokens and every component -->
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<!-- ============================================================
+     This file is structure only. Text that depends on the home
+     state is filled in by the panels in js/ui/, and every id
+     below is the hook one of them writes to.
+     ============================================================ -->
+<div class="wrap">
+
+  <!-- shown by ui/connectionBanner.js when the server is unreachable -->
+  <div class="offline" id="offline">Can't reach the server. Make sure the backend is running (npm start).</div>
+
+  <!-- ============ HEADER · ui/clockPanel.js ============ -->
+  <header class="top animate-in" style="--i:0">
+    <div class="brand">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>
+        </svg>
+      </div>
+      <div>
+        <h1>My Home</h1>
+        <p id="greeting">Welcome home</p>
+      </div>
+    </div>
+    <div class="clock">
+      <div class="time" id="clock">--:--</div>
+      <div class="date" id="date">&mdash;</div>
+    </div>
+  </header>
+
+  <!-- ============ SUMMARY · ui/summaryBar.js ============ -->
+  <div class="summary animate-in" style="--i:1" aria-live="polite">
+    <div class="pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>
+      <span><b id="lightsCount">0</b> lights on</span>
+    </div>
+    <div class="pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--data)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.5a4 4 0 1 1-4 0V4a2 2 0 1 1 4 0z"/></svg>
+      <span><b id="tempPill">22°</b> temperature</span>
+    </div>
+    <div class="pill">
+      <span class="dot" id="secDot"></span>
+      <span id="secPill">Home secured</span>
+    </div>
+    <div class="pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="9" cy="8" r="2" fill="var(--bg)"/><circle cx="15" cy="16" r="2" fill="var(--bg)"/></svg>
+      <span>Scene: <b id="scenePill">Home</b></span>
+    </div>
+  </div>
+
+  <!-- ============ SCENES · ui/scenePicker.js ============ -->
+  <div class="scenes animate-in" style="--i:2" role="group" aria-label="Scenes">
+    <button class="scene" data-scene="home" aria-pressed="true">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10"/></svg>
+      <span class="lbl">Home</span>
+      <span class="desc">Warm lights, comfort, door unlocked</span>
+    </button>
+    <button class="scene" data-scene="away" aria-pressed="false">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
+      <span class="lbl">Away</span>
+      <span class="desc">Everything off, alarm armed, energy-saving</span>
+    </button>
+    <button class="scene" data-scene="night" aria-pressed="false">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <span class="lbl">Night</span>
+      <span class="desc">Lights off, dim hallway, door locked</span>
+    </button>
+    <button class="scene" data-scene="movie" aria-pressed="false">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/><path d="m10 14 4-2-4-2z" fill="currentColor"/></svg>
+      <span class="lbl">Movie</span>
+      <span class="desc">Living room dimmed, evening mood</span>
+    </button>
+  </div>
+
+  <!-- ============ GRID ============ -->
+  <div class="grid">
+
+    <!-- LIGHTS · ui/lightsPanel.js (rows are generated) -->
+    <section class="card lights animate-in" style="--i:3">
+      <div class="card-head">
+        <div class="card-title">
+          <span class="ci"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg></span>
+          <h2>Lights</h2>
+        </div>
+        <span class="card-note" id="lightsNote">&mdash;</span>
+      </div>
+      <div id="lightList"></div>
+    </section>
+
+    <div class="col-b">
+
+      <!-- CLIMATE · ui/climatePanel.js -->
+      <section class="card climate animate-in" style="--i:4">
+        <div class="card-head">
+          <div class="card-title">
+            <span class="ci"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--data)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.5a4 4 0 1 1-4 0V4a2 2 0 1 1 4 0z"/></svg></span>
+            <h2>Climate</h2>
+          </div>
+          <span class="card-note" id="climateNote">&mdash;</span>
+        </div>
+        <div class="thermostat">
+          <button class="stepper" id="tempDown" aria-label="Lower temperature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="temp-dial">
+            <div class="val" id="tempVal">22<span>°C</span></div>
+            <div class="lbl">Target temperature</div>
+          </div>
+          <button class="stepper" id="tempUp" aria-label="Raise temperature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+        <div class="modes" role="group" aria-label="Climate mode">
+          <button class="mode-btn heat" data-mode="heating" aria-pressed="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 0-5 5c0 2 1 3 1 5a4 4 0 0 0 8 0c0-2 1-3 1-5a5 5 0 0 0-5-5z"/></svg>
+            <span>Heating</span>
+          </button>
+          <button class="mode-btn cool" data-mode="cooling" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M4.5 7l15 10M19.5 7l-15 10"/></svg>
+            <span>Cooling</span>
+          </button>
+        </div>
+        <div class="climate-foot">
+          <span>Humidity <b id="humidity">&mdash;</b></span>
+          <span>Air quality <b id="airq">Good</b></span>
+        </div>
+      </section>
+
+      <!-- SECURITY · ui/securityPanel.js -->
+      <section class="card security animate-in" style="--i:5">
+        <div class="card-head">
+          <div class="card-title">
+            <span class="ci"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--safe)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3z"/></svg></span>
+            <h2>Security</h2>
+          </div>
+        </div>
+
+        <div class="sec-item secure" id="doorItem">
+          <div class="sec-id">
+            <span class="si"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+            <div><div class="sec-name">Front door</div><div class="sec-state" id="doorState">&mdash;</div></div>
+          </div>
+          <button class="sec-btn" id="doorBtn"><span>Unlock</span></button>
+        </div>
+
+        <div class="sec-item secure" id="alarmItem">
+          <div class="sec-id">
+            <span class="si"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9z"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+            <div><div class="sec-name">Alarm</div><div class="sec-state" id="alarmState">&mdash;</div></div>
+          </div>
+          <button class="sec-btn" id="alarmBtn"><span>Disarm</span></button>
+        </div>
+
+        <div class="sec-item secure" id="camItem">
+          <div class="sec-id">
+            <span class="si"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m23 7-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>
+            <div><div class="sec-name">Outdoor camera</div><div class="sec-state" id="camState">&mdash;</div></div>
+          </div>
+          <button class="sec-btn" id="camBtn"><span>Turn off</span></button>
+        </div>
+      </section>
+
+      <!-- ENERGY · ui/energyPanel.js -->
+      <section class="card energy animate-in" style="--i:6">
+        <div class="card-head">
+          <div class="card-title">
+            <span class="ci"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--data)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
+            <h2>Energy</h2>
+          </div>
+        </div>
+        <div class="energy-now">
+          <span class="n" id="powerNow">0.0</span><span class="u">kW now</span>
+        </div>
+        <div class="energy-sub">Estimated today: <b id="todayKwh">&mdash;</b> kWh</div>
+        <div class="chart" id="chart" aria-hidden="true"></div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ============ ACTIVITY · ui/activityPanel.js ============ -->
+  <section class="card activity animate-in" style="--i:7">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="ci"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--text-dim)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <h2>Recent activity</h2>
+      </div>
+      <span class="card-note">server log</span>
+    </div>
+    <ul class="event-list" id="eventList"></ul>
+  </section>
+
+  <footer class="foot">Smart Home &middot; modular web app &middot; Express backend, ES modules on the frontend</footer>
+</div>
+
+<!-- type="module" lets the browser load the imports in js/ itself -->
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

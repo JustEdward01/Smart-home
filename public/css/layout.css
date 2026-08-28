@@ -1,0 +1,35 @@
+/* ============================================================
+   LAYOUT
+   ------------------------------------------------------------
+   Page shell and the card grid. Positioning of blocks only;
+   how a block looks is its own component file.
+   ============================================================ */
+
+.wrap{
+  position:relative;
+  z-index:1;
+  max-width:1120px;
+  margin:0 auto;
+  padding:var(--sp-8) var(--sp-5) var(--sp-10);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:var(--sp-5);
+  align-items:start;
+}
+
+/* right-hand column: climate, security, energy stacked */
+.col-b{display:grid;gap:var(--sp-5)}
+
+@media(min-width:920px){
+  .grid{grid-template-columns:1.22fr 1fr}
+}
+
+footer.foot{
+  margin-top:var(--sp-8);
+  text-align:center;
+  color:var(--text-faint);
+  font-size:var(--fs-caption);
+}

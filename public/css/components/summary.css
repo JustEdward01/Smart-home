@@ -1,0 +1,19 @@
+/* Summary bar: at-a-glance pills under the header. */
+
+.summary{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-5)}
+
+.pill{
+  display:flex;align-items:center;gap:var(--sp-2);
+  padding:var(--sp-3) var(--sp-4);
+  border-radius:var(--radius-md);
+  background:var(--surface);
+  border:1px solid var(--border);
+  font-size:var(--fs-small);
+}
+.pill svg{width:18px;height:18px;flex:none}
+.pill b{font-family:var(--font-display);font-weight:var(--fw-semibold)}
+
+/* security indicator */
+.pill .dot{width:8px;height:8px;border-radius:var(--radius-full);flex:none}
+.dot.on{background:var(--safe);box-shadow:0 0 0 4px rgba(74,222,128,.15)}
+.dot.off{background:var(--alert);box-shadow:0 0 0 4px rgba(251,113,133,.14)}

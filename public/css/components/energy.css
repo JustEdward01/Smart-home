@@ -1,0 +1,30 @@
+/* Energy panel: live draw and a 7-day bar chart. */
+
+.energy-now{display:flex;align-items:baseline;gap:var(--sp-2);margin-bottom:var(--sp-1)}
+.energy-now .n{
+  font-family:var(--font-display);
+  font-weight:var(--fw-bold);
+  font-size:var(--fs-stat);
+  letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+}
+.energy-now .u{color:var(--data);font-size:var(--fs-body);font-weight:var(--fw-semibold)}
+
+.energy-sub{color:var(--text-dim);font-size:var(--fs-small);margin-bottom:var(--sp-5)}
+
+.chart{display:flex;align-items:flex-end;gap:var(--sp-2);height:96px}
+.bar-col{
+  flex:1;
+  display:flex;flex-direction:column;align-items:center;
+  gap:var(--sp-2);
+  height:100%;justify-content:flex-end;
+}
+.bar{
+  width:100%;
+  border-radius:var(--radius-sm) var(--radius-sm) 3px 3px;
+  background:linear-gradient(180deg,rgba(84,200,240,.85),rgba(84,200,240,.28));
+  transition:height var(--dur-slow) var(--ease-out);
+}
+/* today stands out in the brand colour */
+.bar.today{background:linear-gradient(180deg,var(--accent),rgba(246,179,82,.35))}
+.bar-lbl{font-size:var(--fs-caption);color:var(--text-faint)}

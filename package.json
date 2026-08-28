@@ -1,0 +1,14 @@
+{
+  "name": "smart-home",
+  "version": "2.0.0",
+  "description": "Smart House web application - modular frontend and backend (Node.js / Express)",
+  "author": "Patru Eduard Andrei (Group 352B)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

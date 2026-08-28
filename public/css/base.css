@@ -1,0 +1,48 @@
+/* ============================================================
+   BASE
+   ------------------------------------------------------------
+   Reset, page background, and the accessibility defaults that
+   apply to the whole document.
+   ============================================================ */
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:var(--font-body);
+  color:var(--text);
+  background:
+    radial-gradient(120% 90% at 50% -10%, var(--bg-2), transparent 55%),
+    linear-gradient(180deg,#0b1020,#0a0e1a 70%);
+  min-height:100vh;
+  line-height:var(--lh-normal);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* Ambient glow: strength follows the active lights (set from JS) */
+body::before{
+  content:"";
+  position:fixed;
+  inset:-20% -20% auto -20%;
+  height:70vh;
+  background:
+    radial-gradient(60% 60% at 50% 0%, rgba(246,179,82,var(--glow)), transparent 70%),
+    radial-gradient(70% 80% at 50% 0%, rgba(84,200,240,.10), transparent 72%);
+  filter:blur(10px);
+  pointer-events:none;
+  z-index:0;
+  transition:opacity var(--dur-slow) var(--ease-out);
+}
+
+/* Visible keyboard focus everywhere */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+.toggle:focus-visible{
+  outline:2px solid var(--data);
+  outline-offset:3px;
+  border-radius:var(--radius-sm);
+}
+
+/* Buttons inherit the page font instead of the browser default */
+button,input{font-family:inherit;font-size:inherit;color:inherit}

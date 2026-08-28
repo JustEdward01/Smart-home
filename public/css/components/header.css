@@ -1,0 +1,48 @@
+/* Page header: brand mark, greeting, clock. */
+
+header.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:var(--sp-5);
+  flex-wrap:wrap;
+  margin-bottom:var(--sp-6);
+}
+
+.brand{display:flex;align-items:center;gap:var(--sp-4)}
+.brand .mark{
+  width:46px;height:46px;
+  border-radius:var(--radius-md);
+  flex:none;
+  display:grid;place-items:center;
+  background:linear-gradient(145deg,rgba(246,179,82,.22),rgba(84,200,240,.14));
+  border:1px solid var(--border-strong);
+  color:var(--accent-soft);
+}
+.brand h1{
+  font-family:var(--font-display);
+  font-weight:var(--fw-bold);
+  font-size:var(--fs-brand);
+  letter-spacing:-.02em;
+  line-height:var(--lh-tight);
+}
+.brand p{color:var(--text-dim);font-size:var(--fs-small);margin-top:2px}
+
+.clock{text-align:right}
+.clock .time{
+  font-family:var(--font-display);
+  font-weight:var(--fw-semibold);
+  font-size:var(--fs-clock);
+  font-variant-numeric:tabular-nums;
+  line-height:var(--lh-tight);
+}
+.clock .date{
+  color:var(--text-dim);
+  font-size:var(--fs-small);
+  margin-top:var(--sp-1);
+}
+
+@media(max-width:560px){
+  header.top{align-items:flex-start}
+  .clock{text-align:left}
+}

@@ -1,0 +1,41 @@
+/* Security panel: door, alarm, camera, each with a state colour. */
+
+.sec-item{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:var(--sp-3);
+  padding:var(--sp-4) 0;
+  border-top:1px solid var(--border);
+}
+.sec-item:first-of-type{border-top:none;padding-top:var(--sp-1)}
+
+.sec-id{display:flex;align-items:center;gap:var(--sp-3)}
+.sec-id .si{
+  width:var(--tile);height:var(--tile);
+  border-radius:var(--radius-md);
+  display:grid;place-items:center;flex:none;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  color:var(--text-dim);
+  transition:color var(--dur) var(--ease-out),background var(--dur) var(--ease-out);
+}
+
+.sec-name{font-weight:var(--fw-medium);font-size:var(--fs-body)}
+.sec-state{font-size:var(--fs-caption);color:var(--text-faint)}
+
+.sec-btn{
+  cursor:pointer;
+  padding:var(--sp-2) var(--sp-4);
+  border-radius:var(--radius-md);
+  font-size:var(--fs-small);
+  font-weight:var(--fw-medium);
+  background:var(--surface-2);
+  border:1px solid var(--border-strong);
+  color:var(--text);
+  transition:background var(--dur) var(--ease-out);
+  white-space:nowrap;
+}
+.sec-btn:hover{background:var(--surface-hover)}
+
+/* state colours, driven by a class from JS */
+.sec-item.secure .si{color:var(--safe);background:rgba(74,222,128,.12)}
+.sec-item.open   .si{color:var(--alert);background:rgba(251,113,133,.12)}

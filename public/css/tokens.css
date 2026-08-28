@@ -1,0 +1,77 @@
+/* ============================================================
+   DESIGN TOKENS
+   ------------------------------------------------------------
+   Every spacing, colour, radius, weight and duration in the
+   project is defined here, once. Components reference these
+   variables and never hard-code a value, which is what keeps
+   the interface consistent as it grows.
+   ============================================================ */
+:root{
+  /* --- Colours: neutrals --- */
+  --bg:#0d1220;
+  --bg-2:#121a2e;
+  --surface:rgba(255,255,255,.045);
+  --surface-2:rgba(255,255,255,.02);
+  --surface-hover:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.09);
+  --border-strong:rgba(255,255,255,.16);
+  --text:#eef2fb;
+  --text-dim:#94a1c0;
+  --text-faint:#5f6d8c;
+
+  /* --- Colours: semantic (each has one clear role) --- */
+  --accent:#f6b352;        /* lights · warmth · selected/active (brand colour) */
+  --accent-soft:#ffcf8a;   /* text on an accent background */
+  --data:#54c8f0;          /* climate (cooling) · energy · informational · focus */
+  --safe:#4ade80;          /* secured state */
+  --alert:#fb7185;         /* unsafe / attention state */
+
+  /* --- Spacing (4px grid) --- */
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
+  --sp-5:20px; --sp-6:24px; --sp-8:32px; --sp-10:40px;
+
+  /* --- Radius (3 values + circle) --- */
+  --radius-sm:8px;
+  --radius-md:12px;
+  --radius-lg:18px;
+  --radius-full:999px;
+
+  /* --- Typography: families --- */
+  --font-display:"Sora",sans-serif;
+  --font-body:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+
+  /* --- Typography: scale (8 steps) --- */
+  --fs-caption:0.75rem;    /* labels, sub-text */
+  --fs-small:0.875rem;     /* secondary text, buttons */
+  --fs-body:1rem;          /* body */
+  --fs-title:1.125rem;     /* card titles */
+  --fs-brand:1.375rem;     /* app name */
+  --fs-clock:1.75rem;      /* clock */
+  --fs-stat:2.25rem;       /* large number (energy) */
+  --fs-hero:3rem;          /* target temperature */
+
+  /* --- Typography: weights --- */
+  --fw-normal:400; --fw-medium:500; --fw-semibold:600; --fw-bold:700;
+
+  /* --- Typography: line-height --- */
+  --lh-tight:1.1; --lh-snug:1.35; --lh-normal:1.5;
+
+  /* --- Shadows --- */
+  --shadow-card:0 20px 50px -24px rgba(0,0,0,.7);
+
+  /* --- Motion: curves + durations --- */
+  --ease-out:cubic-bezier(0.16,1,0.3,1);
+  --ease-in-out:cubic-bezier(0.65,0,0.35,1);
+  --ease-spring:cubic-bezier(0.34,1.4,0.64,1);
+  --dur-fast:120ms; --dur:200ms; --dur-slow:400ms;
+
+  /* --- Component sizes (reused across components) --- */
+  --tile:38px;             /* icon tile for a device / security row */
+  --tile-sm:34px;          /* icon tile in a card head */
+  --control:52px;          /* round button (stepper) */
+
+  /* --- Dynamic state, written by JS --- */
+  --glow:.35;              /* ambient glow strength */
+
+  font-synthesis:none;
+}

@@ -1,0 +1,85 @@
+/* Climate panel: thermostat dial, mode buttons, readings. */
+
+.thermostat{
+  display:flex;align-items:center;justify-content:center;
+  gap:var(--sp-6);
+  padding:var(--sp-1) 0 var(--sp-4);
+}
+
+.stepper{
+  width:var(--control);height:var(--control);
+  border-radius:var(--radius-full);
+  flex:none;cursor:pointer;
+  background:var(--surface-2);
+  border:1px solid var(--border-strong);
+  color:var(--text);
+  display:grid;place-items:center;
+  transition:
+    background var(--dur) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+.stepper svg{width:20px;height:20px}
+.stepper:hover{background:rgba(84,200,240,.14);border-color:var(--data)}
+.stepper:active{transform:scale(.94)}
+
+.temp-dial{text-align:center;min-width:150px}
+.temp-dial .val{
+  font-family:var(--font-display);
+  font-weight:var(--fw-bold);
+  font-size:var(--fs-hero);
+  line-height:var(--lh-tight);
+  letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;
+}
+.temp-dial .val span{
+  font-size:var(--fs-title);
+  color:var(--data);
+  vertical-align:top;
+  margin-left:2px;
+}
+.temp-dial .lbl{color:var(--text-dim);font-size:var(--fs-small);margin-top:var(--sp-2)}
+
+/* mode: heating / cooling */
+.modes{display:flex;gap:var(--sp-2);margin-top:var(--sp-1)}
+.mode-btn{
+  flex:1;cursor:pointer;
+  padding:var(--sp-3);
+  border-radius:var(--radius-md);
+  font-size:var(--fs-small);
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  color:var(--text-dim);
+  display:flex;align-items:center;justify-content:center;gap:var(--sp-2);
+  transition:
+    color var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    background var(--dur) var(--ease-out);
+}
+.mode-btn svg{width:16px;height:16px}
+.mode-btn[aria-pressed="true"]{
+  color:var(--text);
+  border-color:var(--data);
+  background:rgba(84,200,240,.12);
+}
+/* heating uses the warm accent instead of the cool one */
+.mode-btn.heat[aria-pressed="true"]{
+  color:var(--accent-soft);
+  border-color:var(--accent);
+  background:rgba(246,179,82,.12);
+}
+
+.climate-foot{
+  display:flex;justify-content:space-between;
+  margin-top:var(--sp-4);
+  padding-top:var(--sp-4);
+  border-top:1px solid var(--border);
+  color:var(--text-dim);
+  font-size:var(--fs-small);
+}
+.climate-foot b{
+  color:var(--text);
+  font-family:var(--font-display);
+  font-weight:var(--fw-semibold);
+  font-variant-numeric:tabular-nums;
+}

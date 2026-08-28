@@ -1,0 +1,36 @@
+/* Card shell shared by every panel: lights, climate, security, energy, activity. */
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:var(--sp-5);
+  box-shadow:var(--shadow-card);
+}
+
+.card > .card-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:var(--sp-3);
+  margin-bottom:var(--sp-4);
+}
+
+.card-title{display:flex;align-items:center;gap:var(--sp-3)}
+.card-title .ci{
+  width:var(--tile-sm);height:var(--tile-sm);
+  border-radius:var(--radius-md);
+  display:grid;place-items:center;flex:none;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+}
+.card-title h2{
+  font-family:var(--font-display);
+  font-weight:var(--fw-semibold);
+  font-size:var(--fs-title);
+}
+
+/* small right-aligned note in a card head */
+.card-note{
+  color:var(--text-dim);
+  font-size:var(--fs-small);
+  font-variant-numeric:tabular-nums;
+}

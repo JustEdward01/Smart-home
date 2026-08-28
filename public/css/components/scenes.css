@@ -1,0 +1,50 @@
+/* Scene picker: four buttons that each change several devices. */
+
+.scenes{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:var(--sp-3);
+  margin-bottom:var(--sp-6);
+}
+
+.scene{
+  appearance:none;cursor:pointer;text-align:left;
+  padding:var(--sp-4);
+  border-radius:var(--radius-md);
+  background:var(--surface);
+  border:1px solid var(--border);
+  color:var(--text);
+  display:flex;flex-direction:column;gap:var(--sp-3);
+  transition:
+    transform var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    background var(--dur) var(--ease-out);
+}
+.scene:hover{
+  transform:translateY(-2px);
+  border-color:var(--border-strong);
+  background:var(--surface-hover);
+}
+.scene .ico{
+  width:26px;height:26px;
+  color:var(--text-dim);
+  transition:color var(--dur) var(--ease-out);
+}
+.scene .lbl{
+  font-family:var(--font-display);
+  font-weight:var(--fw-semibold);
+  font-size:var(--fs-body);
+}
+.scene .desc{
+  font-size:var(--fs-caption);
+  color:var(--text-faint);
+  line-height:var(--lh-snug);
+}
+
+/* active scene: amber accent, no decorative gradient */
+.scene[aria-pressed="true"]{border-color:var(--accent);background:rgba(246,179,82,.09)}
+.scene[aria-pressed="true"] .ico{color:var(--accent)}
+
+@media(max-width:560px){
+  .scenes{grid-template-columns:repeat(2,1fr)}
+}

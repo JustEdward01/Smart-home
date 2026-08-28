@@ -1,0 +1,26 @@
+/* ============================================================
+   STYLE ENTRY POINT
+   ------------------------------------------------------------
+   The only stylesheet the page links. Order matters: the design
+   tokens must load first, because every file after them refers
+   to those variables.
+   ============================================================ */
+
+/* foundation */
+@import url("tokens.css");
+@import url("base.css");
+@import url("motion.css");
+@import url("layout.css");
+
+/* components, one file each */
+@import url("components/banner.css");
+@import url("components/header.css");
+@import url("components/summary.css");
+@import url("components/scenes.css");
+@import url("components/card.css");
+@import url("components/lights.css");
+@import url("components/climate.css");
+@import url("components/security.css");
+@import url("components/energy.css");
+@import url("components/activity.css");
+@import url("components/loading.css");
